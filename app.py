@@ -1,17 +1,25 @@
+```
 import requests
+from datetime import datetime
 
-# 1. הכתובת של ה-API (תחנת החלל)
-url = "http://api.open-notify.org/iss-now.json"
+response = requests.get("http://api.open-notify.org/iss-now.json")
 
-# 2. שליחת הבקשה
-response = requests.get(url)
+# class MyClass:
+#     def __init__(self, name):
+#         self.name = name
 
-# 3. בדיקה אם קיבלנו 200 (כמו שהמרצה אמר)
-if response.status_code == 200:
-    data = response.json() # הופך את הטקסט למילון של פייתון
-    print("Success!")
-    print(data)
-else:
-    print(f"Error: {response.status_code}")
-    print(f"The type is: {type(response)}")
-    print(f"The response object is: {response}")
+#     def greet(self):
+#         return f"Hello, {self.name}!"
+
+
+data = response.json()
+# print(type(response))
+# print(response)
+# print(data)
+
+print(data["iss_position"])
+ts = data["timestamp"]
+TIME = datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+
+print(f"Current ISS location at {TIME} is LAT: {data["iss_position"]["latitude"]}, LON: {data["iss_position"]["longitude"]} ")
+```
