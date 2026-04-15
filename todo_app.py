@@ -37,5 +37,25 @@ def create_task():
     tasks.append(new_task)
     return jsonify(new_task), 201
 
+# עדכון משימה
+@app.route("/tasks/<task_id>", methods=["PUT"])
+def update_task(task_id):
+    data = request.get_json()
+    for t in tasks:
+        if t["id"] == task_id:
+            t["title"] = data.get("title", t["title"])
+            t["completed"] = data.get("completed", t["completed"])
+            return jsonify(t)
+    return jsonify({"error": "not found"}), 404
+
+# מחיקה
+@app.route("/tasks/<task_id>", methods=["DELETE"])
+def delete_task(task_id):
+    for t in tasks:
+        if t["id"] == task_id:
+            tasks.remove(t)
+            return jsonify({"message": "deleted successfuly"})
+    return jsonify({"error": "not found"}), 404
+
 if __name__ == "__main__":
     app.run(debug=True)
