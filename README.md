@@ -1,20 +1,30 @@
-# 🗂️ Flask TODO API
+# Flask TODO API
 
 A RESTful API for managing tasks — built with Flask, structured with Blueprints, and designed with clean separation of concerns.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 flask-module/
-├── app.py          # Entry point — registers all Blueprints
-├── routes.py       # All task endpoints (Blueprint)
-├── models.py       # In-memory data layer + CRUD logic
-├── errors.py       # Global error handlers (Blueprint)
-├── todo_app.py     # Legacy monolith — Part 1 & 2 history
+├── app.py              # Entry point — registers all Blueprints
+├── routes.py           # All task endpoints (Blueprint)
+├── models.py           # In-memory data layer + CRUD logic
+├── errors.py           # Global error handlers (Blueprint)
+├── todo_app.py         # Legacy monolith — Part 1 & 2 history
+├── requirements.txt
+├── classwork/          # In-class exercises and practice files
+│   ├── app_testing.py
+│   ├── error_handling_exercise1.py
+│   └── hands_on_labs.py
+├── postman/            # Exported Postman collections
+│   ├── todo-api.postman_collection.json
+│   ├── jsonplaceholder-api.postman_collection.json
+│   └── pokeapi.postman_collection.json
 └── screenshots/
-    └── TODO API.postman_collection.json
+    ├── postman-results/    # Test run results from various collections
+    └── performance/        # TODO API performance test results
 ```
 
 ### Separation of Concerns
@@ -28,7 +38,7 @@ flask-module/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ```bash
 # 1. Clone the repo
@@ -39,8 +49,8 @@ cd flask-module
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 
-# 3. Install Flask
-pip install flask
+# 3. Install dependencies
+pip install -r requirements.txt
 
 # 4. Run the server
 python app.py
@@ -50,7 +60,7 @@ Server runs at: `http://127.0.0.1:5000`
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -62,7 +72,7 @@ Server runs at: `http://127.0.0.1:5000`
 
 ---
 
-## 📥 Request & Response Examples
+## Request & Response Examples
 
 ### GET /tasks
 ```json
@@ -101,7 +111,7 @@ Server runs at: `http://127.0.0.1:5000`
 
 ---
 
-## ❌ Error Handling
+## Error Handling
 
 All errors return a **unified JSON format**:
 
@@ -123,22 +133,22 @@ All errors return a **unified JSON format**:
 
 ---
 
-## 🧪 Postman Tests
+## Postman Tests
 
 All 4 required test cases pass:
 
 | # | Request | Expected | Result |
 |---|---|---|---|
-| 1 | `GET /tasks` | `200` | ✅ |
-| 2 | `GET /tasks/999` | `404` | ✅ |
-| 3 | `POST /tasks` (no body) | `400` | ✅ |
-| 4 | `POST /tasks/1` | `405` | ✅ |
+| 1 | `GET /tasks` | `200` | ✅ Pass |
+| 2 | `GET /tasks/999` | `404` | ✅ Pass |
+| 3 | `POST /tasks` (no body) | `400` | ✅ Pass |
+| 4 | `POST /tasks/1` | `405` | ✅ Pass |
 
-Postman Collection: `screenshots/TODO API.postman_collection.json`
+Postman Collection: `postman/todo-api.postman_collection.json`
 
 ---
 
-## ⚡ Performance
+## Performance
 
 Tested with Postman Performance Runner — 20 virtual users, 10 minutes:
 
@@ -150,11 +160,11 @@ Tested with Postman Performance Runner — 20 virtual users, 10 minutes:
 | P99 | 29 ms |
 | Failure % | 0.00% |
 
-> Note: Error % reflects intentional 4xx responses (404/400/405) — not server failures.
+> Performance screenshots available in `screenshots/performance/`
 
 ---
 
-## 🔄 Evolution
+## Evolution
 
 | Part | What changed |
 |---|---|
@@ -164,9 +174,9 @@ Tested with Postman Performance Runner — 20 virtual users, 10 minutes:
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Python 3** 
+- **Python 3**
 - **Flask** — web framework
 - **Werkzeug** — HTTP exceptions (`NotFound`, `BadRequest`, `HTTPException`)
 - **uuid** — unique task ID generation
@@ -174,8 +184,10 @@ Tested with Postman Performance Runner — 20 virtual users, 10 minutes:
 
 ---
 
-## 📌 Notes
+## Notes
 
 - Data is stored **in-memory only** — restarting the server resets all tasks to the 3 hardcoded defaults.
 - This project is intentionally kept simple — no database, no authentication, no deployment config.
-- `todo_app.py` is preserved as historical reference for Parts 1 & 2.
+- `todo_app.py` is preserved as historical reference for Parts 1 and 2.
+- `classwork/` contains in-class exercises not directly related to the TODO API project.
+- `postman/` contains exported collections from various API practice sessions during the course.
