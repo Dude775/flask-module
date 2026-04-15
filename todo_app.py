@@ -24,6 +24,18 @@ def get_task(task_id):
             return jsonify(t)
     return jsonify({"error": "task not found"}), 404
 
+# === POST - יצירת משימה חדשה ===
+@app.route("/tasks", methods=["POST"])
+def create_task():
+    data = request.get_json()
+
+    new_task = {
+        "id": str(uuid.uuid4()),
+        "title": data["title"],
+        "completed": False
+    }
+    tasks.append(new_task)
+    return jsonify(new_task), 201
 
 if __name__ == "__main__":
     app.run(debug=True)
