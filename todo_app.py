@@ -4,11 +4,16 @@ import uuid
 
 app = Flask(__name__)
 
+# רשימת המשימות - זמני עד שנעבור ל-DB
 tasks = [
     {"id": "1", "title": "Learn Flask", "completed": False},
     {"id": "2", "title": "Build API", "completed": False},
     {"id": "3", "title": "Test with Postman", "completed": True}
 ]
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
@@ -21,19 +26,19 @@ def get_task(task_id):
             return jsonify(task)
     return jsonify({"error": "task not found"}), 404
 
+
 @app.route("/tasks", methods=["POST"])
 def create_task():
-    global task_id_counter
     data = request.get_json()
 
     new_task = {
-        "id": task_id_counter,
+        "id": str(uuid.uuid4()),
         "title": data["title"],
         "completed": False
     }
     tasks.append(new_task)
-    task_id_counter += 1
     return jsonify(new_task), 201
+
 
 @app.route("/tasks/<int:task_id>", methods=["PUT"])
 def update_task(task_id):
