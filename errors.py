@@ -17,9 +17,3 @@ def handle_bad_request(e):
         "error": str(e)
     }), 400
 
-# 422
-@errors_bp.app_errorhandler(UnprocessableEntity)
-def handle_unprocessable(e):
-    return jsonify({
-        "error": str(e)
-    }), 422
