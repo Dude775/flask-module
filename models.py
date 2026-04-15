@@ -14,3 +14,13 @@ def get_task_by_id(id):
     for task in tasks:
         if task["id"] == id:
             return task
+
+
+def create_task(task_data):
+    new_task = {
+        "id": str(uuid.uuid4()),
+        "title": task_data["title"],
+        "completed": False
+    }
+    tasks.append(new_task)
+    return new_task
