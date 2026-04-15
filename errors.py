@@ -23,3 +23,10 @@ def handle_unprocessable(e):
     return jsonify({
         "error": str(e)
     }), 422
+
+# שגיאה כללית - 500 - זאת השגיאה הכללית - תיקון טעות
+@errors_bp.app_errorhandler(Exception)
+def handle_generic_error(e):
+    return jsonify({
+        "error": "internal server error"
+    }), 500
