@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify
-from werkzeug.exceptions import NotFound, BadRequest, UnprocessableEntity
+from werkzeug.exceptions import NotFound, BadRequest, UnprocessableEntity, HTTPException
+
 
 errors_bp = Blueprint("errors", __name__)
 
@@ -30,3 +31,14 @@ def handle_generic_error(e):
     return jsonify({
         "error": "internal server error"
     }), 500
+
+from werkzeug.exceptions import HTTPException
+
+# catch all - שאר השגיאות שלא תפסנו למעלה
+@errors_bp.app_errorhandler(HTTPException)
+def handle_http_error(e):
+    return jsonify({
+        "error": e.name,
+        "message": e.description,
+        "status": e.code
+    }), e.code
