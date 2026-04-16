@@ -1,6 +1,7 @@
 from flask import jsonify, request, Blueprint
 from werkzeug.exceptions import NotFound, BadRequest
-from models import get_all_tasks, get_task_by_id, create_task, update_task, delete_task
+from models import get_all_tasks, get_task_by_id, update_task, delete_task
+from db import db
 
 tasks_bp = Blueprint("tasks", __name__)
 
@@ -26,7 +27,12 @@ def create_task_route():
         raise BadRequest("Missing required field: 'title'")
     if not data["title"].strip():
         raise BadRequest("title cant be empty")
-    new_task = create_task(data)
+    new_task = {
+        "title": data["title"].strip(),
+        "completed": False
+    }
+    db.todos.insert_one(new_task)
+    new_task["_id"] = str(new_task["_id"])
     return jsonify(new_task), 201
 
 # PUT - פחות validations מ-POST
