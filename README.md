@@ -2,7 +2,7 @@
 
 A RESTful API for managing tasks — built with Flask, structured with Blueprints, and designed with clean separation of concerns.
 
----
+***
 
 ## Project Structure
 
@@ -36,7 +36,7 @@ flask-module/
 | `models.py` | Data layer — all task logic and in-memory storage |
 | `errors.py` | Error layer — catches all exceptions, formats unified JSON |
 
----
+***
 
 ## Getting Started
 
@@ -58,7 +58,7 @@ python app.py
 
 Server runs at: `http://127.0.0.1:5000`
 
----
+***
 
 ## API Endpoints
 
@@ -70,7 +70,7 @@ Server runs at: `http://127.0.0.1:5000`
 | `PUT` | `/tasks/<task_id>` | Update a task |
 | `DELETE` | `/tasks/<task_id>` | Delete a task |
 
----
+***
 
 ## Request & Response Examples
 
@@ -109,7 +109,7 @@ Server runs at: `http://127.0.0.1:5000`
 { "message": "deleted successfuly" }
 ```
 
----
+***
 
 ## Error Handling
 
@@ -131,7 +131,7 @@ All errors return a **unified JSON format**:
 | `422` | Unprocessable entity |
 | `500` | Unexpected server error |
 
----
+***
 
 ## Postman Tests
 
@@ -146,7 +146,7 @@ All 4 required test cases pass:
 
 Postman Collection: `postman/todo-api.postman_collection.json`
 
----
+***
 
 ## Performance
 
@@ -162,7 +162,7 @@ Tested with Postman Performance Runner — 20 virtual users, 10 minutes:
 
 > Performance screenshots available in `screenshots/performance/`
 
----
+***
 
 ## Evolution
 
@@ -172,7 +172,7 @@ Tested with Postman Performance Runner — 20 virtual users, 10 minutes:
 | Part 2 | Migrated to UUID — unique, JSON-safe, collision-free IDs |
 | Part 3 | Blueprints, global error handlers, unified JSON error format |
 
----
+***
 
 ## Tech Stack
 
@@ -182,7 +182,7 @@ Tested with Postman Performance Runner — 20 virtual users, 10 minutes:
 - **uuid** — unique task ID generation
 - **Postman** — API testing & performance testing
 
----
+***
 
 ## Notes
 
