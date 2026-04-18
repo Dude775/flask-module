@@ -1,57 +1,75 @@
 from flask import jsonify, request, Blueprint
 from werkzeug.exceptions import NotFound, BadRequest
-from models import get_all_tasks, get_task_by_id, update_task, delete_task
+from bson import ObjectId
 from db import db
 
-tasks_bp = Blueprint("tasks", __name__)
+todos_bp = Blueprint("todos", __name__)
 
-# מחזיר את כל המשימות
-@tasks_bp.route('/tasks', methods=['GET'])
-def get_tasks():
-    return jsonify(get_all_tasks())
+# כל הtodos
+@todos_bp.route('/todos', methods=['GET'])
+def get_todos():
+    todos = list(db.todos.find())
+    for t in todos:
+        t["_id"] = str(t["_id"])
+    return jsonify(todos)
 
-@tasks_bp.route('/tasks/<task_id>', methods=['GET'])
-def get_task(task_id):
-    task = get_task_by_id(task_id)
-    if not task:
-        raise NotFound(f"Task with ID {task_id} not found")
-    return jsonify(task)
+@todos_bp.route('/todos/<id>', methods=['GET'])
+def get_todo(id):
+    try:
+        todo = db.todos.find_one({"_id": ObjectId(id)})
+    except:
+        raise NotFound(f"invalid id format")
+    if not todo:
+        raise NotFound(f"Todo with ID {id} not found")
+    todo["_id"] = str(todo["_id"])
+    return jsonify(todo)
 
-@tasks_bp.route('/tasks', methods=['POST'])
-def create_task_route():
+@todos_bp.route('/todos', methods=['POST'])
+def create_todo():
     if not request.is_json:
         raise BadRequest("Request body must be JSON")
     data = request.get_json()
-    # חייב להיות title
     if 'title' not in data:
         raise BadRequest("Missing required field: 'title'")
     if not data["title"].strip():
         raise BadRequest("title cant be empty")
-    new_task = {
+    new_todo = {
         "title": data["title"].strip(),
         "completed": False
     }
-    db.todos.insert_one(new_task)
-    new_task["_id"] = str(new_task["_id"])
-    return jsonify(new_task), 201
+    db.todos.insert_one(new_todo)
+    new_todo["_id"] = str(new_todo["_id"])
+    return jsonify(new_todo), 201
 
-# PUT - פחות validations מ-POST
-@tasks_bp.route('/tasks/<task_id>', methods=['PUT'])
-def update_task_route(task_id):
-    t = get_task_by_id(task_id)
-    if not t:
-        raise NotFound("task not found")
+# update - מקבל title או completed או שניהם
+@todos_bp.route('/todos/<id>', methods=['PUT'])
+def update_todo(id):
+    try:
+        todo = db.todos.find_one({"_id": ObjectId(id)})
+    except:
+        raise NotFound("invalid id")
+    if not todo:
+        raise NotFound("todo not found")
     data = request.get_json()
     if not data or ("title" not in data and "completed" not in data):
         raise BadRequest("need title or completed field")
-    updated = update_task(task_id, data)
+    update_fields = {}
+    if "title" in data:
+        update_fields["title"] = data["title"]
+    if "completed" in data:
+        update_fields["completed"] = data["completed"]
+    db.todos.update_one({"_id": ObjectId(id)}, {"$set": update_fields})
+    updated = db.todos.find_one({"_id": ObjectId(id)})
+    updated["_id"] = str(updated["_id"])
     return jsonify(updated)
 
-@tasks_bp.route('/tasks/<task_id>', methods=['DELETE'])
-def delete_task_route(task_id):
-    # בודק שקיים לפני שמוחק
-    t = get_task_by_id(task_id)
-    if not t:
+@todos_bp.route('/todos/<id>', methods=['DELETE'])
+def delete_todo(id):
+    try:
+        todo = db.todos.find_one({"_id": ObjectId(id)})
+    except:
+        raise NotFound("invalid id")
+    if not todo:
         raise NotFound("not found")
-    delete_task(task_id)
+    db.todos.delete_one({"_id": ObjectId(id)})
     return jsonify({"message": "deleted successfuly"}), 200
