@@ -9,10 +9,9 @@ todos_bp = Blueprint("todos", __name__)
 @todos_bp.route('/todos', methods=['GET'])
 def get_todos():
     col = get_collection("todos")
-    todos = list(col.find())
-    for t in todos:
-        t["_id"] = str(t["_id"])
+    todos = list(map(lambda t: {**t, "_id": str(t["_id"])}, col.find()))
     return jsonify(todos)
+
 
 @todos_bp.route('/todos/<id>', methods=['GET'])
 def get_todo(id):
